@@ -48,7 +48,7 @@ class Post(models.Model):
     def save(self,) -> None:
         if not self.slug:
             self.slug = slugify(self.title)
-        if self.is_published:
+        if self.is_published and not self.publish_date:
             self.publish_date = datetime.now()
         return super().save()
 
