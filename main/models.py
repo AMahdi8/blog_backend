@@ -45,12 +45,12 @@ class Post(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-    def save(self,) -> None:
+    def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
         if self.is_published and not self.publish_date:
             self.publish_date = datetime.now()
-        return super().save()
+        return super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return f'{self.user} -> {self.title}'
