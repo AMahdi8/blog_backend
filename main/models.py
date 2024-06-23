@@ -6,9 +6,9 @@ from django.utils.text import slugify
 
 
 class CustomUser(AbstractUser):
-    birth_date = models.DateField()
-    phone_number = models.CharField(max_length=11)
-    about_me = models.TextField()
+    birth_date = models.DateField(blank=True, null=True)
+    phone_number = models.CharField(max_length=11, blank=True, null=True)
+    about_me = models.TextField(blank=True, null=True)
     profile = models.ImageField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -45,12 +45,12 @@ class Post(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-    def save(self, force_insert: bool = ..., force_update: bool = ..., using: str | None = ..., update_fields: Iterable[str] | None = ...) -> None:
+    def save(self,) -> None:
         if not self.slug:
             self.slug = slugify(self.title)
         if self.is_published:
             self.publish_date = datetime.now()
-        return super().save(force_insert, force_update, using, update_fields)
+        return super().save()
 
     def __str__(self) -> str:
         return f'{self.user} -> {self.title}'
