@@ -29,6 +29,13 @@ class Category(models.Model):
         return self.title
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class Post(models.Model):
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name='posts')
@@ -41,6 +48,7 @@ class Post(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    tags = models.ManyToManyField(Tag, related_name='posts')
 
     class Meta:
         ordering = ['-created_at']
@@ -85,20 +93,6 @@ class Like(models.Model):
 
     def __str__(self) -> str:
         return f'{self.user} liked {self.post}'
-
-
-class Tag(models.Model):
-    name = models.CharField(max_length=255)
-
-    def __str__(self) -> str:
-        return self.name
-
-
-class PostTag(models.Model):
-    post = models.ForeignKey(
-        Post, on_delete=models.CASCADE, related_name='tags')
-    tag = models.ForeignKey(
-        Tag, on_delete=models.CASCADE, related_name='tages')
 
 
 class Follow(models.Model):
